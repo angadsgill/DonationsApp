@@ -1,15 +1,18 @@
 /* Global Styles */
 :root {
-    --primary-color: #7E57C2;  /* Main purple */
-    --secondary-color: #B39DDB; /* Lighter purple */
-    --accent-color: #5E35B1;   /* Darker purple */
-    --danger-color: #EF5350;   /* Red for delete/warning */
-    --light-color: #F5F3FF;    /* Very light purple for backgrounds */
-    --dark-color: #4527A0;     /* Very dark purple for text */
+    --primary-color: #7E57C2;      /* Main purple */
+    --secondary-color: #B39DDB;     /* Lighter purple */
+    --accent-color: #5E35B1;        /* Darker purple */
+    --danger-color: #EF5350;        /* Red for delete/warning */
+    --light-color: #F5F3FF;         /* Very light purple */
+    --dark-color: #4527A0;          /* Very dark purple */
     --gray-color: #9E9E9E;
     --border-color: #E0E0E0;
     --success-color: #66BB6A;
     --shadow-color: rgba(126, 87, 194, 0.1);
+    --bg-gradient: linear-gradient(135deg, #F5F3FF 0%, #EDE7F6 100%);
+    --card-gradient: linear-gradient(145deg, #FFFFFF, #F5F3FF);
+    --accent-gradient: linear-gradient(45deg, var(--primary-color), var(--accent-color));
 }
 
 * {
@@ -20,9 +23,10 @@
 }
 
 body {
-    background-color: #F8F7FF;
+    background: var(--bg-gradient);
     color: #333;
     line-height: 1.6;
+    min-height: 100vh;
 }
 
 .container {
@@ -59,7 +63,9 @@ body {
 }
 
 .btn-primary {
-    background-color: var(--primary-color);
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
     color: white;
 }
 
@@ -69,7 +75,9 @@ body {
 }
 
 .btn-accent {
-    background-color: var(--accent-color);
+    background: var(--accent-gradient);
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
     color: white;
 }
 
@@ -95,11 +103,11 @@ body {
 .form-control {
     width: 100%;
     padding: 12px 16px;
-    border: 2px solid var(--border-color);
+    border: 1px solid rgba(126, 87, 194, 0.1);
     border-radius: 12px;
     font-size: 16px;
     transition: all 0.3s ease;
-    background-color: white;
+    background-color: var(--light-color);
 }
 
 .form-control:focus {
@@ -107,17 +115,19 @@ body {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
     transform: translateY(-1px);
+    background-color: white;
 }
 
 /* Card Styles */
 .card {
-    background-color: white;
+    background: white;
     border-radius: 16px;
     box-shadow: 0 4px 20px var(--shadow-color);
     padding: 24px;
     margin-bottom: 24px;
     transition: transform 0.3s ease;
     background: linear-gradient(145deg, #ffffff, #f8f7ff);
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 .card:hover {
@@ -129,9 +139,10 @@ body {
     max-width: 500px;
     margin: 50px auto;
     padding: 32px;
-    background-color: white;
+    background: white;
     border-radius: 20px;
     box-shadow: 0 8px 30px var(--shadow-color);
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 .auth-header {
@@ -148,9 +159,10 @@ body {
 .auth-tabs {
     display: flex;
     margin-bottom: 24px;
-    background-color: var(--light-color);
+    background: var(--light-color);
     border-radius: 12px;
     padding: 4px;
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 .auth-tab {
@@ -179,16 +191,21 @@ body {
     flex: 1;
     text-align: center;
     padding: 20px;
-    border: 2px solid var(--border-color);
+    border: 1px solid rgba(126, 87, 194, 0.1);
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
+    background: white;
 }
 
 .role-option.selected {
-    border-color: var(--primary-color);
-    background-color: var(--light-color);
-    box-shadow: 0 2px 12px var(--shadow-color);
+    background: var(--accent-gradient);
+    border: none;
+    color: white;
+}
+
+.role-option.selected i {
+    color: white;
 }
 
 .role-option i {
@@ -222,7 +239,7 @@ body {
 }
 
 .stat-card {
-    background-color: white;
+    background: white;
     border-radius: 16px;
     box-shadow: 0 4px 20px var(--shadow-color);
     padding: 24px;
@@ -231,6 +248,7 @@ body {
     position: relative;
     overflow: hidden;
     background: linear-gradient(145deg, #ffffff, #f8f7ff);
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 .stat-card::before {
@@ -239,8 +257,19 @@ body {
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(126, 87, 194, 0.05) 0%, rgba(94, 53, 177, 0.05) 100%);
+    pointer-events: none;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background: var(--accent-gradient);
 }
 
 .stat-card:hover {
@@ -261,13 +290,12 @@ body {
 
 /* Navigation */
 .navbar {
-    background-color: white;
+    background: var(--accent-gradient);
     box-shadow: 0 4px 20px var(--shadow-color);
     padding: 16px 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    background: linear-gradient(145deg, #ffffff, #f8f7ff);
     backdrop-filter: blur(10px);
 }
 
@@ -280,7 +308,7 @@ body {
 .navbar-brand {
     font-size: 24px;
     font-weight: bold;
-    color: var(--primary-color);
+    color: white;
     text-decoration: none;
 }
 
@@ -291,7 +319,7 @@ body {
 }
 
 .nav-link {
-    color: var(--gray-color);
+    color: rgba(255, 255, 255, 0.9) !important;
     text-decoration: none;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -300,8 +328,8 @@ body {
 }
 
 .nav-link:hover, .nav-link.active {
-    color: var(--primary-color);
-    background-color: var(--light-color);
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link.active {
@@ -316,20 +344,21 @@ body {
     transform: translateX(-50%);
     width: 20px;
     height: 3px;
-    background-color: var(--primary-color);
+    background-color: white;
     border-radius: 3px;
 }
 
 /* Food Item Card */
 .food-item-card {
     display: flex;
-    background-color: white;
+    background: white;
     border-radius: 16px;
     box-shadow: 0 4px 20px var(--shadow-color);
     margin-bottom: 24px;
     overflow: hidden;
     transition: transform 0.3s ease;
     background: linear-gradient(145deg, #ffffff, #f8f7ff);
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 .food-item-card:hover {
@@ -420,7 +449,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
 }
 
 .modal-content {
@@ -430,6 +459,7 @@ body {
     width: 90%;
     max-width: 500px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 /* Table Styles */
@@ -437,6 +467,8 @@ body {
     overflow-x: auto;
     border-radius: 16px;
     box-shadow: 0 4px 20px var(--shadow-color);
+    background: white;
+    border: 1px solid rgba(126, 87, 194, 0.1);
 }
 
 .table {
@@ -453,8 +485,8 @@ body {
 }
 
 .table th {
-    background-color: var(--light-color);
-    color: var(--dark-color);
+    background: var(--accent-gradient);
+    color: white;
     font-weight: 600;
 }
 
@@ -542,10 +574,30 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--secondary-color);
+    background: var(--accent-gradient);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-color);
+}
+
+/* Add some subtle animations */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Add some texture */
+.dashboard::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, rgba(126, 87, 194, 0.02) 0%, transparent 50%);
+    z-index: -1;
 } 
