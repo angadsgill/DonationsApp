@@ -105,11 +105,30 @@ const restaurant = {
     addEventListeners() {
         // Navigation
         document.getElementById('nav-logout').addEventListener('click', () => auth.logout());
+        document.getElementById('nav-dashboard').addEventListener('click', () => this.renderDashboard());
         document.getElementById('nav-inventory').addEventListener('click', () => this.renderInventory());
         document.getElementById('nav-profile').addEventListener('click', () => this.renderProfile());
         
         // Add donation button
-        document.getElementById('add-donation-btn').addEventListener('click', () => this.showAddDonationForm());
+        const addDonationBtn = document.getElementById('add-donation-btn');
+        if (addDonationBtn) {
+            addDonationBtn.addEventListener('click', () => this.showAddDonationForm());
+        }
+
+        // Edit and delete buttons
+        document.querySelectorAll('.edit-donation').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const donationId = parseInt(e.target.dataset.id);
+                this.editDonation(donationId);
+            });
+        });
+
+        document.querySelectorAll('.delete-donation').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const donationId = parseInt(e.target.dataset.id);
+                this.deleteDonation(donationId);
+            });
+        });
     },
 
     renderInventory() {
@@ -173,93 +192,108 @@ const restaurant = {
         this.addEventListeners();
     },
 
-    showAddDonationForm() {
-        const modal = document.createElement('div');
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        `;
-
-        modal.innerHTML = `
-            <div class="card" style="width: 500px; max-width: 90%;">
-                <h2>Add New Donation</h2>
-                <form id="donation-form">
+    showAddDonationForm(existingDonation = null) {
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        modalOverlay.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>${existingDonation ? 'Edit' : 'Add New'} Donation</h2>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <form id="donation-form" class="styled-form">
                     <div class="form-group">
                         <label for="food-name">Food Name</label>
-                        <input type="text" id="food-name" class="form-control" required>
+                        <input type="text" id="food-name" class="form-control" required value="${existingDonation?.name || ''}">
                     </div>
                     <div class="form-group">
                         <label for="food-description">Description</label>
-                        <textarea id="food-description" class="form-control" rows="3" required></textarea>
+                        <textarea id="food-description" class="form-control" rows="3" required>${existingDonation?.description || ''}</textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="food-quantity">Quantity</label>
-                        <input type="text" id="food-quantity" class="form-control" required>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="food-quantity">Quantity</label>
+                            <input type="text" id="food-quantity" class="form-control" required value="${existingDonation?.quantity || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label for="food-category">Category</label>
+                            <select id="food-category" class="form-control" required>
+                                <option value="Prepared Food">Prepared Food</option>
+                                <option value="Bakery">Bakery</option>
+                                <option value="Produce">Produce</option>
+                                <option value="Canned Goods">Canned Goods</option>
+                                <option value="Dairy">Dairy</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="food-category">Category</label>
-                        <select id="food-category" class="form-control" required>
-                            <option value="Prepared Food">Prepared Food</option>
-                            <option value="Bakery">Bakery</option>
-                            <option value="Produce">Produce</option>
-                            <option value="Canned Goods">Canned Goods</option>
-                            <option value="Dairy">Dairy</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="pickup-window">Pickup Window</label>
-                        <input type="text" id="pickup-window" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="expiry-date">Expiry Date</label>
-                        <input type="date" id="expiry-date" class="form-control" required>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="pickup-window">Pickup Window</label>
+                            <input type="text" id="pickup-window" class="form-control" required value="${existingDonation?.pickupWindow || ''}">
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="date" id="expiry-date" class="form-control" required value="${existingDonation?.expDate || ''}">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="food-image">Image URL</label>
-                        <input type="url" id="food-image" class="form-control">
+                        <input type="url" id="food-image" class="form-control" value="${existingDonation?.image || ''}">
                     </div>
-                    <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <div class="modal-actions">
                         <button type="button" class="btn btn-secondary" id="cancel-donation">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Donation</button>
+                        <button type="submit" class="btn btn-primary">${existingDonation ? 'Save Changes' : 'Add Donation'}</button>
                     </div>
                 </form>
             </div>
         `;
 
-        document.body.appendChild(modal);
+        document.body.appendChild(modalOverlay);
 
         // Add event listeners
-        document.getElementById('cancel-donation').addEventListener('click', () => {
-            document.body.removeChild(modal);
+        modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+            document.body.removeChild(modalOverlay);
+        });
+
+        modalOverlay.querySelector('#cancel-donation').addEventListener('click', () => {
+            document.body.removeChild(modalOverlay);
+        });
+
+        // Close modal when clicking outside
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                document.body.removeChild(modalOverlay);
+            }
         });
 
         document.getElementById('donation-form').addEventListener('submit', (e) => {
             e.preventDefault();
             
             // Add new donation to the list
-            this.donations.push({
-                id: this.donations.length + 1,
+            const newDonation = {
+                id: existingDonation?.id || this.donations.length + 1,
                 name: document.getElementById('food-name').value,
                 description: document.getElementById('food-description').value,
                 quantity: document.getElementById('food-quantity').value,
                 category: document.getElementById('food-category').value,
                 pickupWindow: document.getElementById('pickup-window').value,
                 expDate: document.getElementById('expiry-date').value,
-                prepDate: new Date().toISOString().split('T')[0],
-                status: 'Available',
+                prepDate: existingDonation?.prepDate || new Date().toISOString().split('T')[0],
+                status: existingDonation?.status || 'Available',
                 image: document.getElementById('food-image').value || 'https://via.placeholder.com/150'
-            });
+            };
+
+            if (existingDonation) {
+                // Update existing donation
+                this.donations = this.donations.map(d => d.id === existingDonation.id ? newDonation : d);
+            } else {
+                // Add new donation
+                this.donations.push(newDonation);
+            }
 
             // Remove modal and refresh the view
-            document.body.removeChild(modal);
+            document.body.removeChild(modalOverlay);
             this.renderDashboard();
         });
     }

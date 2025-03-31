@@ -43,6 +43,19 @@ body {
     font-weight: 500;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(126, 87, 194, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.2), transparent);
+    pointer-events: none;
 }
 
 .btn-primary {
@@ -93,6 +106,7 @@ body {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+    transform: translateY(-1px);
 }
 
 /* Card Styles */
@@ -103,6 +117,7 @@ body {
     padding: 24px;
     margin-bottom: 24px;
     transition: transform 0.3s ease;
+    background: linear-gradient(145deg, #ffffff, #f8f7ff);
 }
 
 .card:hover {
@@ -213,6 +228,19 @@ body {
     padding: 24px;
     text-align: center;
     transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(145deg, #ffffff, #f8f7ff);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
 }
 
 .stat-card:hover {
@@ -239,6 +267,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
+    background: linear-gradient(145deg, #ffffff, #f8f7ff);
+    backdrop-filter: blur(10px);
 }
 
 .navbar-container {
@@ -274,6 +304,22 @@ body {
     background-color: var(--light-color);
 }
 
+.nav-link.active {
+    position: relative;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 3px;
+}
+
 /* Food Item Card */
 .food-item-card {
     display: flex;
@@ -283,6 +329,7 @@ body {
     margin-bottom: 24px;
     overflow: hidden;
     transition: transform 0.3s ease;
+    background: linear-gradient(145deg, #ffffff, #f8f7ff);
 }
 
 .food-item-card:hover {
@@ -293,6 +340,18 @@ body {
     width: 200px;
     height: 200px;
     object-fit: cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.food-item-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.1), transparent);
 }
 
 .food-item-details {
@@ -417,4 +476,76 @@ body {
 
 .table tr:hover {
     background-color: var(--light-color);
+}
+
+/* Modal Enhancements */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+    color: var(--dark-color);
+    font-size: 1.8em;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: var(--gray-color);
+    cursor: pointer;
+    padding: 0 8px;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    color: var(--danger-color);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.styled-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--secondary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
 } 
