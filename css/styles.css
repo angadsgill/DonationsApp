@@ -1,0 +1,616 @@
+/* Global Styles */
+:root {
+    /* Dark Mode - High Contrast */
+    /* Dark Mode - Revised Contrast 2 */
+    /* Dark Mode - Revised Contrast 3 */
+    --dark-bg-primary: #252538;    /* Lighter dark blue/purple */
+    --dark-bg-secondary: #1D1D2F; /* Darker secondary bg */
+    --dark-card-bg: #282840;     /* Slightly lighter card bg */
+    --dark-border-color: #383860; /* Muted purple border */
+    --dark-text-primary: #F0F0F5;  /* Brighter off-white */
+    --dark-text-secondary: #B0B0D0;/* Lighter muted purple/gray */
+    --dark-accent-primary: #8A40E5; /* Darker vibrant purple accent */
+    --dark-accent-secondary: #AA70F5;/* Darker lighter vibrant purple */
+    --dark-accent-gradient: linear-gradient(45deg, var(--dark-accent-primary), var(--dark-accent-secondary));
+    --dark-shadow-color: rgba(0, 0, 0, 0.5); /* Darker shadow */
+    --soft-shadow: 0 6px 20px var(--dark-shadow-color);
+    --softer-shadow: 0 4px 10px var(--dark-shadow-color);
+
+    /* Keep functional colors */
+    --danger-color: #EF5350;
+    --success-color: #66BB6A;
+
+    /* Deprecated Light Mode Vars (keep for reference or remove later) */
+    /* --primary-color: #7E57C2; */
+    /* --secondary-color: #B39DDB; */
+    /* --accent-color: #5E35B1; */
+    /* --light-color: #F5F3FF; */
+    /* --dark-color: #4527A0; */
+    /* --gray-color: #9E9E9E; */
+    /* --border-color: #E0E0E0; */
+    /* --bg-gradient: linear-gradient(135deg, #F5F3FF 0%, #EDE7F6 100%); */
+    /* --card-gradient: linear-gradient(145deg, #FFFFFF, #F5F3FF); */
+    /* --accent-gradient: linear-gradient(45deg, var(--primary-color), var(--accent-color)); */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Default font set in body */
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background: var(--dark-bg-primary); /* Dark background */
+    color: var(--dark-text-primary); /* Light text */
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px; /* Slightly more horizontal padding */
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600; /* Make buttons slightly bolder */
+    font-family: 'Poppins', sans-serif; /* Use Poppins for buttons */
+    transition: all 0.3s ease;
+    box-shadow: var(--softer-shadow);
+    border: 1px solid transparent; /* Add transparent border for consistency */
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Remove light overlay */
+    /* background: linear-gradient(rgba(255,255,255,0.2), transparent); */
+    pointer-events: none;
+}
+
+.btn-primary {
+    background: var(--dark-accent-gradient); /* Use dark accent gradient */
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
+    color: #FFFFFF; /* Ensure high contrast text */
+}
+
+.btn-secondary {
+    background-color: var(--dark-accent-secondary); /* Use lighter accent */
+    color: #FFFFFF; /* White text on lighter accent */
+}
+
+.btn-accent {
+    /* .btn-accent might be redundant now, same as primary */
+    background: var(--dark-accent-gradient);
+    background-size: 200% 200%;
+    animation: gradient 5s ease infinite;
+    color: #FFFFFF;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--dark-shadow-color); /* Dark mode hover shadow */
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px; /* Slightly less space between form groups */
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--dark-border-color); /* Dark border */
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: 'Lato', sans-serif;
+    transition: all 0.3s ease;
+    background-color: var(--dark-bg-secondary); /* Dark input background */
+    color: var(--dark-text-primary);
+    caret-color: var(--dark-accent-secondary); /* Make cursor visible */
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--dark-accent-primary); /* Accent border on focus */
+    box-shadow: 0 0 0 3px rgba(154, 103, 234, 0.2); /* Accent glow */
+    transform: translateY(-1px);
+    background-color: var(--dark-bg-secondary); /* Keep bg same on focus, rely on border/shadow */
+}
+
+/* Card Styles */
+.card {
+    background: var(--dark-card-bg); /* Dark card background */
+    border-radius: 16px;
+    box-shadow: var(--soft-shadow);
+    padding: 28px;
+    margin-bottom: 28px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add shadow transition */
+    /* background: linear-gradient(145deg, #ffffff, #f8f7ff); */ /* Remove light gradient */
+    border: 1px solid var(--dark-border-color); /* Dark border */
+    color: var(--dark-text-secondary);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--dark-shadow-color); /* Enhance shadow on hover */
+}
+
+/* Auth Pages */
+.auth-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 36px; /* More padding in auth container */
+    background: var(--dark-card-bg); /* Dark auth container */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px var(--dark-shadow-color);
+    border: 1px solid var(--dark-border-color);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 28px; /* Consistent margin */
+}
+
+.auth-header h1 {
+    color: var(--dark-accent-secondary); /* Lighter accent for heading */
+    font-size: 2.2em; /* Slightly smaller auth heading */
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif; /* Use Poppins for main headings */
+    font-weight: 600;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 28px; /* Consistent margin */
+    background: var(--dark-bg-secondary); /* Use secondary for tab container */
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--dark-border-color);
+}
+
+.auth-tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-weight: 600; /* Bolder tabs */
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark-text-secondary); /* Muted text for inactive tabs */
+}
+
+.auth-tab.active {
+    background: var(--dark-accent-gradient); /* Active tab uses gradient */
+    color: #FFFFFF; /* White text on active tab */
+    box-shadow: var(--softer-shadow);
+}
+
+.role-selector {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px; /* Consistent margin */
+}
+
+.role-option {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+    border: 1px solid var(--dark-border-color);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background: var(--dark-bg-primary); /* Use primary dark for role option */
+    color: var(--dark-text-secondary); /* Muted text */
+}
+
+.role-option.selected {
+    background: var(--dark-accent-gradient); /* Use dark accent gradient */
+    border: none;
+    color: white;
+}
+
+.role-option.selected i {
+    color: white;
+}
+
+.role-option i {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: var(--dark-accent-secondary); /* Lighter accent for icon */
+}
+
+/* Dashboard Styles */
+.dashboard {
+    padding: 36px 0; /* More vertical padding */
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 36px; /* More space after header */
+}
+
+.dashboard-header h1 {
+    color: var(--dark-text-primary); /* Light text for heading */
+    font-size: 1.8em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px; /* Consistent gap */
+    margin-bottom: 36px; /* Consistent margin */
+}
+
+.stat-card {
+    background: var(--dark-card-bg); /* Dark card background */
+    border-radius: 16px;
+    box-shadow: var(--soft-shadow);
+    padding: 28px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    /* background: linear-gradient(145deg, #ffffff, #f8f7ff); */ /* Remove light gradient */
+    border: 1px solid var(--dark-border-color);
+    color: var(--dark-text-secondary); /* Muted text for stat card body */
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(126, 87, 194, 0.05) 0%, rgba(94, 53, 177, 0.05) 100%);
+    pointer-events: none;
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--dark-accent-gradient); /* Use gradient for top border */
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.stat-card i {
+    font-size: 36px;
+    margin-bottom: 16px;
+    color: var(--dark-accent-secondary); /* Lighter accent for icon */
+}
+
+.stat-card h3 {
+    font-size: 28px; /* Slightly smaller stat number */
+    margin-bottom: 8px;
+    color: var(--dark-text-primary); /* Light text for stat number */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+/* Navigation */
+.navbar {
+    background: var(--dark-bg-primary); /* Darkest background for navbar */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Slightly stronger shadow for dark */
+    padding: 12px 0; /* Slightly less navbar padding */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* backdrop-filter: blur(10px); */ /* Blur might not look good on dark bg */
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: 700; /* Bolder brand */
+    font-family: 'Poppins', sans-serif; /* Use Poppins */
+    color: var(--dark-accent-secondary); /* Lighter accent for brand */
+    text-decoration: none;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+    gap: 28px; /* Consistent gap */
+}
+
+.nav-link {
+    color: var(--dark-text-secondary) !important; /* Muted nav link color */
+    text-decoration: none;
+    font-weight: 500; /* Keep nav links slightly less bold */
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; /* Specific transition */
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--dark-text-primary) !important; /* Brighter on hover/active */
+    background-color: var(--dark-bg-secondary); /* Use secondary bg for hover */
+}
+
+.nav-link.active {
+    position: relative;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    background-color: var(--dark-accent-primary); /* Use primary accent for active indicator */
+    border-radius: 3px;
+}
+
+/* Food Item Card */
+.food-item-card {
+    display: flex;
+    background: var(--dark-card-bg); /* Dark card background */
+    border-radius: 16px;
+    box-shadow: var(--soft-shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* background: linear-gradient(145deg, #ffffff, #f8f7ff); */ /* Remove light gradient */
+    border: 1px solid var(--dark-border-color);
+    color: var(--dark-text-secondary); /* Muted text for card body */
+}
+
+.food-item-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px var(--dark-shadow-color); /* Enhance shadow on hover */
+}
+
+.food-item-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--dark-bg-secondary); /* Add a bg color for missing images */
+}
+
+.food-item-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0,0,0,0.1), transparent);
+}
+
+.food-item-details {
+    padding: 28px; /* Consistent padding */
+    flex: 1;
+}
+
+.food-item-details h3 {
+    color: var(--dark-text-primary);
+    margin-bottom: 12px;
+    font-size: 1.4em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+.food-item-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Slightly smaller gap */
+    margin-top: 20px; /* More space before actions */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-nav {
+        gap: 12px;
+    }
+
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .food-item-card {
+        flex-direction: column;
+    }
+
+    .food-item-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .auth-container {
+        margin: 20px;
+        padding: 24px;
+    }
+
+    .role-selector {
+        flex-direction: column;
+    }
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Darker overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* Slightly less blur */
+}
+
+.modal-content {
+    background: var(--dark-card-bg); /* Dark modal background */
+    color: var(--dark-text-primary); /* Light text in modal */
+    border-radius: 20px;
+    padding: 28px; /* Consistent padding */
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25); /* Adjusted modal shadow */
+    border: 1px solid var(--dark-border-color);
+    max-height: 90vh; /* Limit height to 90% of viewport height */
+    overflow-y: auto; /* Add vertical scrollbar if content overflows */
+}
+
+/* Table Styles */
+.table-container {
+    overflow-x: auto;
+    border-radius: 16px;
+    box-shadow: var(--soft-shadow); /* Use soft shadow */
+    background: var(--dark-card-bg); /* Dark table container */
+    border: 1px solid var(--dark-border-color);
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: var(--dark-card-bg); /* Dark table background */
+}
+
+.table th, .table td {
+    padding: 14px 16px; /* Slightly less vertical padding in table cells */
+    text-align: left;
+    border-bottom: 1px solid var(--dark-border-color); /* Dark border */
+}
+
+.table th {
+    background: var(--dark-bg-primary); /* Even darker header background */
+    color: var(--dark-accent-secondary); /* Accent color for header text */
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif; /* Use Poppins for table headers */
+}
+
+.table th:first-child {
+    border-top-left-radius: 16px;
+}
+
+.table th:last-child {
+    border-top-right-radius: 16px;
+}
+
+.table tr:last-child td:first-child {
+     border-bottom-left-radius: 16px;
+}
+
+.table tr:last-child td:last-child {
+     border-bottom-right-radius: 16px;
+}
+
+.table td {
+    color: var(--dark-text-secondary); /* Muted text for table data */
+}
+
+.table tr:hover td {
+    background-color: var(--dark-bg-secondary); /* Hover effect for rows */
+    color: var(--dark-text-primary);
+}
+
+/* Scrollbar Styles (Optional - for better dark mode integration) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-bg-secondary);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--dark-border-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-accent-primary);
+}
+
+/* Add some subtle animations */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Add some texture */
+.dashboard::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    /* background: radial-gradient(circle at 50% 50%, rgba(126, 87, 194, 0.02) 0%, transparent 50%); */ /* Remove light texture */
+    z-index: -1;
+}
+
+/* Auth Error Message */
+.auth-error {
+    background-color: rgba(239, 83, 80, 0.1); /* danger color with low opacity */
+    color: var(--danger-color);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(239, 83, 80, 0.3);
+    text-align: center;
+}
