@@ -2,79 +2,10 @@
 
 // Charity functionality
 const charity = {
-    // Mock data for available donations (can be adapted from restaurant mock data)
-    // Note: In a real mock, this might need to be populated based on restaurant.donations
-    // For simplicity here, we'll use a static list.
-    mockAvailableDonations: [
-         // Corresponds to item 1 from restaurant.js
-         {
-            id: 1,
-            restaurant_username: 'MockResto',
-            name: 'Fresh Pasta',
-            description: 'Leftover pasta from dinner service, includes vegetarian option.',
-            quantity: '5 kg',
-            category: 'Prepared Meals',
-            exp_date: '2024-07-16T14:00:00Z',
-            pickup_window_start: '10:00',
-            pickup_window_end: '14:00',
-            photo_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtGxJQNLQ_tpfDqgGfFpEARarc7qNGTDVEYg&s',
-            status: 'Available',
-            dietary_info: 'Vegetarian option available',
-            created_at: '2024-07-15T10:00:00Z'
-        },
-         // Corresponds to item 4 from restaurant.js
-         {
-            id: 4,
-            restaurant_username: 'MockResto', // Assuming same restaurant for simplicity
-            name: 'Bread Loaves',
-            description: 'Freshly baked sourdough and whole wheat bread.',
-            quantity: '10 Loaves',
-            category: 'Bakery',
-            exp_date: '2024-07-19T23:59:59Z',
-            pickup_window_start: '11:00',
-            pickup_window_end: '15:00',
-            photo_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIm7FWyiVyVnFxwEbAudo-GstNsbvahOT0MQ&s',
-            status: 'Available',
-            dietary_info: 'Contains gluten',
-            created_at: '2024-07-16T08:00:00Z'
-        },
-        {
-            id: 5,
-            restaurant_username: 'MockResto', // Assuming same restaurant for simplicity
-            name: 'Mixed Produce Box',
-            description: 'Assortment of fresh vegetables (carrots, lettuce, tomatoes).',
-            quantity: '2 boxes',
-            category: 'Produce',
-            exp_date: '2024-07-19T23:59:59Z',
-            pickup_window_start: '11:00',
-            pickup_window_end: '15:00',
-            photo_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpgM8uOdjDlYWAewo6cchk0YRVb72F75TGrA&s',
-            status: 'Available',
-            dietary_info: 'Vegan, Gluten-Free',
-            created_at: '2024-07-16T08:00:00Z'
-        },
-         // Corresponds to item 5 from restaurant.js - BUT it's 'Approved' there, so shouldn't be listed here.
-         // Let's add another available one
-         {
-            id: 6, // New ID
-            restaurant_username: 'MockRestaurant',
-            name: 'Apple Pies',
-            description: 'Surplus apple pies from yesterday.',
-            quantity: '3 pies',
-            category: 'Bakery',
-            exp_date: '2024-07-17T10:00:00Z',
-            pickup_window_start: '08:00',
-            pickup_window_end: '09:30',
-            photo_url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShGvV_1zfnQCiMnjXk7by4zrlZKJQw1yvBIg&s',
-            status: 'Available',
-            dietary_info: 'Contains dairy, gluten',
-            created_at: '2024-07-16T20:00:00Z'
-        }
-
-    ],
-    // Mock data for charity's history/pending (can be static for demo)
-    mockPendingPickups: 1,
-    mockTotalReceived: 8,
+    // --- REMOVED STATIC MOCK DATA ---
+    // mockAvailableDonations: [ ... ],
+    // mockPendingPickups: 1, // Removed pending stat
+    mockTotalReceived: 8, // Keep mock total received for now
 
     // Render the main dashboard view
     renderDashboard() { // Removed async
@@ -85,7 +16,7 @@ const charity = {
         appContainer.innerHTML = this.getNavbarHTML('dashboard') + `
             <div class="container dashboard">
                 <div class="dashboard-header">
-                     <h1>Welcome, ${auth.currentUser?.profile?.organization_name || auth.currentUser?.username || 'Charity'}</h1>
+                     <h1 class="page-title">Welcome, ${auth.currentUser?.profile?.organization_name || auth.currentUser?.username || 'Charity'}</h1> <!-- Use page-title -->
                      <!-- Add buttons if needed -->
                 </div>
                  <div id="dashboard-error" class="auth-error" style="display: none;"></div>
@@ -94,9 +25,9 @@ const charity = {
                     <p>Loading stats...</p>
                 </div>
 
-                <div class="card">
-                    <h2>Available Donations</h2>
-                    <div class="food-items-container" id="available-donations-container">
+                <div class="card recent-donations-card">
+                    <h2 class="page-title">Available Donations</h2> <!-- Use page-title -->
+                    <div class="recent-donations-content food-items-container" id="available-donations-container">
                          <p>Loading donations...</p>
                     </div>
                 </div>
@@ -104,40 +35,49 @@ const charity = {
         `;
         this.addEventListeners(); // Add listeners
 
-        // Use mock summary data
+        // Get available donations dynamically from restaurant data
+        const availableDonations = restaurant.donations.filter(d => d.status === 'Available');
+
+        // Calculate summary stats
         const summary = {
-            available_donations: this.mockAvailableDonations.length, // Count from mock data
-            pending_pickups: this.mockPendingPickups,
-            total_donations_received: this.mockTotalReceived
+            available_donations: availableDonations.length,
+            // pending_pickups: ..., // Removed pending stat
+            total_donations_received: this.mockTotalReceived // Keep mock total for now
         };
         this.renderStats(summary);
 
-        // Render available donations from mock data (sorted by date)
-        const sortedDonations = [...this.mockAvailableDonations].sort((a, b) =>
-            new Date(b.created_at) - new Date(a.created_at)
+        // Render available donations (sorted by date)
+        const sortedDonations = [...availableDonations].sort((a, b) =>
+            new Date(b.created_at) - new Date(a.created_at) // Assuming created_at exists
         );
         this.renderAvailableDonations(sortedDonations, 'available-donations-container');
     },
 
-    // Render the stats cards
+    // Render the stats cards (Updated Structure)
     renderStats(summary) {
         const statsContainer = document.getElementById('stats-container');
         if (!statsContainer || !summary) return;
         statsContainer.innerHTML = `
-            <div class="stat-card">
-                <i class="fas fa-box-open"></i> <!-- Reverted icon -->
-                <h3>${summary.available_donations ?? 0}</h3>
-                <p>Available Donations</p>
+            <div class="stat-card type-active"> <!-- Assuming 'active' type for available -->
+                 <div class="stat-card-icon-bg"></div>
+                 <p class="stat-card-description">Available Donations</p>
+                 <h3 class="stat-card-title">${summary.available_donations ?? 0}</h3>
+                 <div class="stat-card-content">
+                    <i class="fas fa-box-open"></i>
+                    <span>Ready for pickup</span>
+                 </div>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-clock"></i>
-                <h3>${summary.pending_pickups ?? 0}</h3>
-                <p>Pending Pickups</p>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-history"></i> <!-- Changed icon -->
-                <h3>${summary.total_donations_received ?? 0}</h3>
-                <p>Total Received</p> <!-- Updated text -->
+
+            <!-- Removed Pending Pickups Stat Card -->
+
+            <div class="stat-card type-completed"> <!-- Assuming 'completed' type for received -->
+                 <div class="stat-card-icon-bg"></div>
+                 <p class="stat-card-description">Total Received</p>
+                 <h3 class="stat-card-title">${summary.total_donations_received ?? 0}</h3>
+                 <div class="stat-card-content">
+                    <i class="fas fa-history"></i>
+                    <span>Donations received</span>
+                 </div>
             </div>
         `;
     },
@@ -154,28 +94,75 @@ const charity = {
         // Re-attach listeners if needed and not using delegation
     },
 
-    // Render a single available donation card
+    // Render a single available donation card (Updated Structure)
     renderDonationCard(donation) {
-        const expiryDate = donation.exp_date ? new Date(donation.exp_date).toLocaleString() : 'N/A';
-        // No distance calculation needed
-        const defaultImage = 'https://via.placeholder.com/150?text=No+Image';
+        const expiryDate = donation.exp_date ? new Date(donation.exp_date).toLocaleDateString() : 'N/A'; // Use DateString
+        const transparentPixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+        // Only show 'Available' items, so badge is always Available
+        const statusBadgeClass = 'status-available';
+        const statusText = 'Available';
 
         return `
-            <div class="food-item-card" data-donation-id="${donation.id}">
-                 <img src="${donation.photo_url || defaultImage}" alt="${donation.name}" class="food-item-image">
+            <div class="food-item-card charity-view-card" data-donation-id="${donation.id}"> <!-- Added charity-view-card class -->
+                <div class="food-item-image-wrapper">
+                    <img src="${donation.photo_url || transparentPixel}" alt="${donation.name}" class="food-item-image">
+                </div>
                 <div class="food-item-details">
-                    <h3>${donation.name}</h3>
-                     <p><strong>${donation.restaurant_username || 'Unknown Restaurant'}</strong></p>
-                    <p>${donation.description || 'No description.'}</p>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 10px;">
-                        <div><strong>Quantity:</strong> ${donation.quantity}</div>
-                        <div><strong>Category:</strong> ${donation.category}</div>
-                        <div><strong>Expires:</strong> ${expiryDate}</div>
-                        <div><strong>Pickup:</strong> ${donation.pickup_window_start || ''} - ${donation.pickup_window_end || ''}</div>
-                         ${donation.dietary_info ? `<div><strong>Dietary:</strong> ${donation.dietary_info}</div>` : ''}
+                    <div class="food-item-header">
+                        <div>
+                            <h3 class="food-item-title">${donation.name}</h3>
+                            <p class="food-item-description">
+                                From: <strong>${donation.restaurant?.username || donation.restaurant_username || 'Unknown Restaurant'}</strong>
+                            </p>
+                            <p class="food-item-description">${donation.description || 'No description.'}</p>
+                        </div>
+                        <span class="status-badge ${statusBadgeClass}">${statusText}</span>
                     </div>
+
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <i class="fas fa-shopping-bag detail-item-icon"></i>
+                            <div class="detail-item-content">
+                                <span class="detail-item-label">Quantity</span>
+                                <span class="detail-item-value">${donation.quantity}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-tag detail-item-icon"></i>
+                            <div class="detail-item-content">
+                                <span class="detail-item-label">Category</span>
+                                <span class="detail-item-value">${donation.category}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-calendar-alt detail-item-icon"></i>
+                            <div class="detail-item-content">
+                                <span class="detail-item-label">Expires</span>
+                                <span class="detail-item-value">${expiryDate}</span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock detail-item-icon"></i>
+                            <div class="detail-item-content">
+                                <span class="detail-item-label">Pickup</span>
+                                <span class="detail-item-value">${donation.pickup_window_start || '?'} - ${donation.pickup_window_end || '?'}</span>
+                            </div>
+                        </div>
+                         ${donation.dietary_info ? `
+                         <div class="detail-item">
+                            <i class="fas fa-leaf detail-item-icon"></i> <!-- Example icon for dietary -->
+                            <div class="detail-item-content">
+                                <span class="detail-item-label">Dietary</span>
+                                <span class="detail-item-value">${donation.dietary_info}</span>
+                            </div>
+                        </div>` : ''}
+                    </div>
+
                     <div class="food-item-actions">
-                        <button class="btn btn-primary request-donation">Request Pickup</button>
+                        <button class="btn btn-primary request-donation">
+                           <i class="fas fa-hand-holding-heart"></i> Request Pickup
+                        </button>
                     </div>
                 </div>
             </div>
@@ -193,7 +180,7 @@ const charity = {
         appContainer.innerHTML = this.getNavbarHTML('search') + `
             <div class="container dashboard">
                 <div class="dashboard-header">
-                    <h1>Search Available Donations</h1>
+                    <h1 class="page-title">Search Available Donations</h1> <!-- Use page-title -->
                 </div>
                  <div id="search-error" class="auth-error" style="display: none;"></div>
 
@@ -249,8 +236,9 @@ const charity = {
         const resultsContainer = document.getElementById('search-results-container');
         if(resultsContainer) resultsContainer.innerHTML = '<p>Filtering...</p>';
 
-        // Filter mock data
-        let filteredDonations = this.mockAvailableDonations;
+        // Filter available donations from the restaurant's list
+        let baseAvailable = restaurant.donations.filter(d => d.status === 'Available');
+        let filteredDonations = baseAvailable;
         if (categoryFilter) {
             filteredDonations = filteredDonations.filter(d => d.category === categoryFilter);
         }
@@ -273,35 +261,48 @@ const charity = {
         // No token check
         console.log(`Requesting donation ID (mock): ${donationId}`);
 
-        // Find the donation in the mock list
-        const donation = this.mockAvailableDonations.find(d => d.id == donationId);
+        // Find the donation in the *restaurant's* list
+        const donation = restaurant.donations.find(d => d.id == donationId);
 
         if (donation) {
-             // Simulate success
-             alert(`Pickup request sent for "${donation.name}"! (Mock)`);
+            // Check if it's actually available before requesting
+            if (donation.status === 'Available') {
+                 // Simulate success
+                 alert(`Pickup request sent for "${donation.name}"! (Mock)`);
 
-             // --- Improved Simulation ---
-             // 1. Visually disable the button
-             if(buttonElement) {
-                 buttonElement.textContent = 'Requested';
-                 buttonElement.disabled = true;
-             }
-             // 2. (Optional) Remove the item from this charity's available list after a short delay
-             //    to simulate it being claimed.
-             setTimeout(() => {
-                 const cardElement = buttonElement?.closest('.food-item-card');
-                 cardElement?.remove(); // Remove the card from the DOM
-                 // Also remove from the mock array to prevent reappearing on filter/sort
-                 this.mockAvailableDonations = this.mockAvailableDonations.filter(d => d.id != donationId);
-                 // Update dashboard count if needed
-                 const summary = {
-                     available_donations: this.mockAvailableDonations.length,
-                     pending_pickups: this.mockPendingPickups + 1, // Increment pending
-                     total_donations_received: this.mockTotalReceived
-                 };
-                 this.renderStats(summary);
-                 this.mockPendingPickups++; // Update the stored count
-             }, 500); // 0.5 second delay
+                 // Update the status in the central restaurant.donations array
+                 donation.status = 'Requested';
+                 donation.updated_at = new Date().toISOString(); // Add timestamp for update
+                 console.log("Updated donation status in restaurant.donations:", donation);
+
+                 // --- Visual Feedback ---
+                 // 1. Visually disable the button
+                 if(buttonElement) {
+                     buttonElement.textContent = 'Requested';
+                     buttonElement.disabled = true;
+                 }
+                 // 2. Remove the item from this charity's *current view* after a short delay
+                 setTimeout(() => {
+                     const cardElement = buttonElement?.closest('.food-item-card');
+                     cardElement?.remove(); // Remove the card from the DOM
+                     // Re-render dashboard stats to reflect one less available item
+                     // Note: We removed pending count, so no need to increment that.
+                     const availableCount = restaurant.donations.filter(d => d.status === 'Available').length;
+                     const summary = {
+                         available_donations: availableCount,
+                         total_donations_received: this.mockTotalReceived // Keep mock total
+                     };
+                     this.renderStats(summary);
+                 }, 500); // 0.5 second delay
+            } else {
+                // Donation found but not available
+                alert(`"${donation.name}" is no longer available (Status: ${donation.status}).`);
+                // Optionally refresh the view to remove it if it shouldn't be shown
+                 setTimeout(() => {
+                     const cardElement = buttonElement?.closest('.food-item-card');
+                     cardElement?.remove();
+                 }, 500);
+            }
 
         } else {
              console.error("Mock request failed: Donation not found with ID", donationId);
@@ -322,7 +323,7 @@ const charity = {
         appContainer.innerHTML = this.getNavbarHTML('profile') + `
             <div class="container dashboard">
                 <div class="dashboard-header">
-                    <h1>Your Charity Profile</h1>
+                    <h1 class="page-title">Your Charity Profile</h1> <!-- Use page-title -->
                 </div>
                  <div id="profile-error" class="auth-error" style="display: none;"></div>
                  <div class="card" id="profile-content">
@@ -442,51 +443,103 @@ const charity = {
     },
 
     // Display error messages
-    // Removed displayError function
+    displayError(message, containerId = 'dashboard-error') { // Added back for profile page
+        const targetContainer = document.getElementById(containerId);
+        if (targetContainer) {
+            targetContainer.textContent = message;
+            targetContainer.style.display = message ? 'block' : 'none';
+        } else {
+            console.warn(`Error container #${containerId} not found.`);
+            if(message) alert(`Error: ${message}`);
+        }
+    },
 
-    // Generate Navbar HTML
+
+    // Generate Navbar HTML (Updated Structure)
     getNavbarHTML(activeLink) {
-        const userName = auth.currentUser?.profile?.organization_name || auth.currentUser?.username || 'User';
+        const userName = auth.currentUser?.username || 'User';
+        const initials = userName?.substring(0, 2).toUpperCase() || '??';
+
         return `
-            <nav class="navbar">
+            <header class="navbar">
                 <div class="container navbar-container">
-                    <a href="#" class="navbar-brand">Food Donation App (Charity)</a>
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a href="#" class="nav-link ${activeLink === 'dashboard' ? 'active' : ''}" data-nav="dashboard">Dashboard</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link ${activeLink === 'search' ? 'active' : ''}" data-nav="search">Search Food</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link ${activeLink === 'profile' ? 'active' : ''}" data-nav="profile">Profile</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link" data-nav="logout">Logout (${userName})</a></li>
-                    </ul>
+                    <div class="navbar-brand-group">
+                        <div class="navbar-logo-placeholder">
+                            <i class="fas fa-shopping-bag"></i> <!-- Placeholder Icon -->
+                        </div>
+                        <a href="#" class="navbar-brand" data-nav="dashboard">MealBridge</a>
+                        <span class="role-badge">Charity</span>
+                    </div>
+
+                    <nav class="navbar-nav">
+                        <a href="#" class="nav-link ${activeLink === 'dashboard' ? 'active' : ''}" data-nav="dashboard">Dashboard</a>
+                        <a href="#" class="nav-link ${activeLink === 'search' ? 'active' : ''}" data-nav="search">Search Food</a>
+                        <!-- Profile link removed, handled by user display click -->
+                        <!-- Add History link if needed -->
+                    </nav>
+
+                    <div class="navbar-actions">
+                         <!-- Make user display clickable for profile -->
+                        <a href="#" class="user-display" data-nav="profile" title="View Profile">
+                            <div class="avatar-placeholder">${initials}</div>
+                            <span class="user-name">${userName}</span>
+                        </a>
+                        <button class="btn btn-ghost text-secondary icon-only" data-nav="logout" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
                 </div>
-            </nav>
+            </header>
         `;
     },
 
-    // Centralized Event Listener Setup
+    // Centralized Event Listener Setup - Strictest Logic
     addEventListeners() {
         const appContainer = document.getElementById('app');
         if (!appContainer) return;
 
-        // Use event delegation
-        appContainer.replaceWith(appContainer.cloneNode(true)); // Simple way to remove old listeners
-        document.getElementById('app').addEventListener('click', async (e) => {
-            // Navigation Links
-            if (e.target.matches('.nav-link')) {
-                e.preventDefault();
-                const targetNav = e.target.dataset.nav;
-                if (targetNav === 'dashboard') this.renderDashboard();
-                else if (targetNav === 'search') this.renderSearch();
-                else if (targetNav === 'profile') this.renderProfile();
-                else if (targetNav === 'logout') auth.logout();
-            }
-            // Request Donation Button
-            else if (e.target.matches('.request-donation')) {
+        // Listener for specific actions within the main app container
+        appContainer.addEventListener('click', (e) => {
+            // Check for specific action buttons first
+            const requestButton = e.target.closest('.request-donation');
+            if (requestButton) {
                  const card = e.target.closest('[data-donation-id]');
                  if (card) {
                      const donationId = card.dataset.donationId;
-                     this.requestDonation(donationId, e.target); // Pass button for disabling
+                     console.log(`Request donation button clicked: ${donationId}`);
+                     this.requestDonation(donationId, requestButton); // Pass the button itself
+                     return; // Action handled, stop further checks
                  }
             }
+            // Add other specific action checks here (e.g., edit/delete if added to charity view)
+
+            // Then check specifically for clicks DIRECTLY on known interactive navigation elements or their direct children (icons)
+            let navElement = null;
+            const target = e.target;
+            const parent = target.parentElement;
+
+            // Check if target or parent matches specific interactive selectors
+            if (target.matches('a.nav-link[data-nav], button[data-nav="logout"], a.user-display[data-nav="profile"], a.navbar-brand[data-nav="dashboard"]')) {
+                navElement = target;
+            } else if (parent?.matches('a.nav-link[data-nav], button[data-nav="logout"], a.user-display[data-nav="profile"], a.navbar-brand[data-nav="dashboard"]')) {
+                // Handle clicks on icons inside these elements
+                navElement = parent;
+            }
+
+            if (navElement) { // Only proceed if the click was directly on or in a known interactive element
+                e.preventDefault();
+                const targetNav = navElement.dataset.nav;
+                console.log(`Navigation Clicked: ${targetNav} on element`, navElement);
+
+                if (targetNav === 'dashboard') this.renderDashboard();
+                else if (targetNav === 'search') this.renderSearch();
+                else if (targetNav === 'profile') this.renderProfile();
+                else if (targetNav === 'logout') {
+                    console.log("--- charity.js logout ACTION ---");
+                    auth.logout();
+                }
+            }
+            // Otherwise ignore the click completely
         });
 
          // Listener for search form submission

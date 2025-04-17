@@ -46,101 +46,132 @@ const auth = {
         const appContainer = document.getElementById('app');
         if (!appContainer) return; // Guard against missing element
 
+        // New structure based on login.tsx and new CSS
         appContainer.innerHTML = `
             <div class="auth-container">
-                <div class="auth-header">
-                    <h1>Food Donation App</h1>
-                    <p>Connect restaurants with excess food to charities in need</p>
-                </div>
-
-                <div class="auth-tabs">
-                    <div class="auth-tab active" id="login-tab">Login</div>
-                    <div class="auth-tab" id="register-tab">Register</div>
-                </div>
-
-                <div id="auth-error-message" class="auth-error" style="display: none;"></div>
-
-                <div id="login-form">
-                    <!-- Role selector ADDED BACK for mock login -->
-                    <div class="role-selector login-role-selector">
-                        <div class="role-option selected" data-role="restaurant">
-                            <i class="fas fa-utensils"></i>
-                            <div>Restaurant</div>
+                <div class="card">
+                    <div class="auth-header">
+                        <div class="logo-placeholder">
+                            <i class="fas fa-utensils"></i> <!-- Placeholder Icon -->
                         </div>
-                        <div class="role-option" data-role="charity">
-                            <i class="fas fa-hand-holding-heart"></i>
-                            <div>Charity</div>
+                        <h1 class="auth-title">MealBridge</h1>
+                        <p class="auth-description">
+                            Connect restaurants with excess food to charities in need
+                        </p>
+                    </div>
+
+                    <div class="auth-card-content">
+                        <div class="auth-tabs">
+                            <div class="auth-tab active" id="login-tab" data-target="login-form">Login</div>
+                            <div class="auth-tab" id="register-tab" data-target="register-form">Register</div>
                         </div>
+
+                        <div id="auth-error-message" class="auth-error" style="display: none;"></div>
+
+                        <!-- Login Form Content -->
+                        <div id="login-form" class="auth-tab-content active">
+                            <div class="role-selector login-role-selector">
+                                <button class="role-option selected" data-role="restaurant">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Restaurant</span>
+                                </button>
+                                <button class="role-option" data-role="charity">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                    <span>Charity</span>
+                                </button>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="login-username" class="input-label">
+                                    <i class="fas fa-user"></i> Username
+                                </label>
+                                <div class="input-wrapper">
+                                    <!-- <i class="fas fa-user input-icon"></i> --> <!-- Icon in label now -->
+                                    <input type="text" id="login-username" class="form-control" placeholder="Enter your username">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="login-password" class="input-label">
+                                    <i class="fas fa-lock"></i> Password
+                                </label>
+                                <div class="input-wrapper">
+                                     <!-- <i class="fas fa-lock input-icon"></i> --> <!-- Icon in label now -->
+                                    <input type="password" id="login-password" class="form-control" placeholder="Enter your password">
+                                </div>
+                            </div>
+
+                            <div> <!-- Wrapper for right alignment -->
+                                <a href="#" id="forgot-password" class="forgot-password-link">
+                                    Forgot password?
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Register Form Content -->
+                        <div id="register-form" class="auth-tab-content" style="display: none;">
+                             <p class="text-center text-secondary mb-4">Create a new account to start donating or receiving food.</p>
+                             <div class="role-selector register-role-selector">
+                                 <button class="role-option selected" data-role="restaurant">
+                                     <i class="fas fa-utensils"></i>
+                                     <span>Restaurant</span>
+                                 </button>
+                                 <button class="role-option" data-role="charity">
+                                     <i class="fas fa-hand-holding-heart"></i>
+                                     <span>Charity</span>
+                                 </button>
+                             </div>
+                             <!-- Keep existing registration fields for now, style them later if needed -->
+                             <div class="form-group">
+                                <label for="reg-username" class="input-label">Username</label>
+                                <input type="text" id="reg-username" class="form-control" placeholder="Choose a username">
+                             </div>
+                             <div class="form-group">
+                                <label for="reg-org-name" class="input-label">Organization Name</label>
+                                <input type="text" id="reg-org-name" class="form-control" placeholder="Enter your organization name">
+                             </div>
+                             <div class="form-group">
+                                <label for="reg-email" class="input-label">Email</label>
+                                <input type="email" id="reg-email" class="form-control" placeholder="Enter your email">
+                             </div>
+                             <div class="form-group">
+                                <label for="reg-password" class="input-label">Password</label>
+                                <input type="password" id="reg-password" class="form-control" placeholder="Create a password">
+                             </div>
+                             <div class="form-group">
+                                <label for="reg-confirm-password" class="input-label">Confirm Password</label>
+                                <input type="password" id="reg-confirm-password" class="form-control" placeholder="Confirm your password">
+                             </div>
+                             <button class="btn btn-primary auth-login-button" id="register-btn">Register</button>
+                        </div>
+
+                         <!-- Reset Password Form (Keep hidden structure for now) -->
+                         <div id="reset-password-form" style="display: none;">
+                            <h2 class="auth-title" style="font-size: 1.5rem; margin-bottom: 1rem;">Reset Password</h2>
+                            <p class="auth-description mb-4">Enter your email to receive a password reset link:</p>
+                            <div class="form-group">
+                                <label for="reset-email" class="input-label">Email</label>
+                                <input type="email" id="reset-email" class="form-control" placeholder="Enter your email">
+                            </div>
+                            <button class="btn btn-primary auth-login-button" style="margin-bottom: 0.5rem;" id="reset-btn">Send Reset Link</button>
+                            <button class="btn btn-outline btn-outline-primary" style="width: 100%;" id="back-to-login">Back to Login</button>
+                        </div>
+
+                    </div> <!-- End auth-card-content -->
+
+                    <div class="auth-card-footer">
+                         <button class="btn btn-primary auth-login-button" id="login-btn">
+                             <span class="mr-2">Login</span>
+                             <i class="fas fa-arrow-right"></i>
+                         </button>
                     </div>
-                    <div class="form-group">
-                        <label for="login-username">Username</label> <!-- Changed id -->
-                        <input type="text" id="login-username" class="form-control" placeholder="Enter your username">
+
+                    <div class="terms-link">
+                        <p>
+                        </p>
                     </div>
-
-                    <div class="form-group">
-                        <label for="login-password">Password</label> <!-- Changed id -->
-                        <input type="password" id="login-password" class="form-control" placeholder="Enter your password">
-                    </div>
-
-                    <div class="form-group">
-                        <a href="#" id="forgot-password">Forgot password?</a>
-                    </div>
-
-                    <button class="btn btn-primary" style="width: 100%;" id="login-btn">Login</button>
-                </div>
-
-                <div id="register-form" style="display: none;">
-                     <div class="role-selector">
-                         <div class="role-option selected" data-role="restaurant">
-                             <i class="fas fa-utensils"></i>
-                             <div>Restaurant</div>
-                         </div>
-                         <div class="role-option" data-role="charity">
-                             <i class="fas fa-hand-holding-heart"></i>
-                             <div>Charity</div>
-                         </div>
-                     </div>
-
-                    <div class="form-group">
-                        <label for="reg-username">Username</label> <!-- Added Username -->
-                        <input type="text" id="reg-username" class="form-control" placeholder="Choose a username">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reg-org-name">Organization Name</label> <!-- Changed id -->
-                        <input type="text" id="reg-org-name" class="form-control" placeholder="Enter your organization name">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reg-email">Email</label>
-                        <input type="email" id="reg-email" class="form-control" placeholder="Enter your email">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reg-password">Password</label>
-                        <input type="password" id="reg-password" class="form-control" placeholder="Create a password">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="reg-confirm-password">Confirm Password</label>
-                        <input type="password" id="reg-confirm-password" class="form-control" placeholder="Confirm your password">
-                    </div>
-
-                    <button class="btn btn-primary" style="width: 100%;" id="register-btn">Register</button>
-                </div>
-
-                <!-- Verification form removed -->
-
-                <div id="reset-password-form" style="display: none;">
-                    <h2>Reset Password</h2>
-                    <p>Enter your email to receive a password reset link:</p>
-                    <div class="form-group">
-                        <input type="email" id="reset-email" class="form-control" placeholder="Enter your email">
-                    </div>
-                    <button class="btn btn-primary" style="width: 100%;" id="reset-btn">Send Reset Link</button>
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" id="back-to-login">Back to Login</button>
-                </div>
-            </div>
+                </div> <!-- End card -->
+            </div> <!-- End auth-container -->
         `;
 
         // Add event listeners
@@ -327,6 +358,7 @@ const auth = {
 
     // Logout function
     logout() { // Removed async
+        console.log("--- auth.logout() CALLED ---"); // Add log here
         console.log("Logging out (mock)...");
         // Clear mock data and render login page
         this.currentUser = null;
